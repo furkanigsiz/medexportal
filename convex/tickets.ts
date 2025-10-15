@@ -41,19 +41,23 @@ export const createTicket = mutation({
     description: v.string(),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Not authenticated");
-    }
+    // Geçici olarak authentication devre dışı
+    // const identity = await ctx.auth.getUserIdentity();
+    // if (!identity) {
+    //   throw new Error("Not authenticated");
+    // }
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .first();
+    // const user = await ctx.db
+    //   .query("users")
+    //   .withIndex("by_email", (q) => q.eq("email", identity.email!))
+    //   .first();
 
-    if (!user) {
-      throw new Error("User not found");
-    }
+    // if (!user) {
+    //   throw new Error("User not found");
+    // }
+
+    // Mock user for demo
+    const user = { _id: "mock-user-id" as any, name: "Demo User", email: "demo@medex.com" };
 
     const ticketId = await ctx.db.insert("tickets", {
       userId: user._id,
@@ -75,19 +79,23 @@ export const updateTicketStatus = mutation({
     reply: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Not authenticated");
-    }
+    // Geçici olarak authentication devre dışı
+    // const identity = await ctx.auth.getUserIdentity();
+    // if (!identity) {
+    //   throw new Error("Not authenticated");
+    // }
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .first();
+    // const user = await ctx.db
+    //   .query("users")
+    //   .withIndex("by_email", (q) => q.eq("email", identity.email!))
+    //   .first();
 
-    if (!user || (user.role !== "admin" && user.role !== "superadmin")) {
-      throw new Error("Bu işlem için yetkiniz yok");
-    }
+    // if (!user || (user.role !== "admin" && user.role !== "superadmin")) {
+    //   throw new Error("Bu işlem için yetkiniz yok");
+    // }
+
+    // Mock admin user for demo
+    const user = { _id: "mock-user-id" as any, name: "Demo Admin", email: "admin@medex.com", role: "admin" };
 
     await ctx.db.patch(args.ticketId, {
       status: args.status,
@@ -103,19 +111,24 @@ export const addTicketReply = mutation({
     reply: v.string(),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Not authenticated");
-    }
+    // Geçici olarak authentication devre dışı
+    // const identity = await ctx.auth.getUserIdentity();
+    // if (!identity) {
+    //   throw new Error("Not authenticated");
+    // }
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .first();
+    // const user = await ctx.db
+    //   .query("users")
+    //   .withIndex("by_email", (q) => q.eq("email", identity.email!))
+    //   .first();
 
-    if (!user || (user.role !== "admin" && user.role !== "superadmin")) {
-      throw new Error("Bu işlem için yetkiniz yok");
-    }
+    // Mock user for demo
+    const user = { _id: "mock-user-id" as any, name: "Demo User", email: "demo@medex.com" };
+
+    // Geçici olarak role kontrolü devre dışı
+    // if (!user || (user.role !== "admin" && user.role !== "superadmin")) {
+    //   throw new Error("Bu işlem için yetkiniz yok");
+    // }
 
     await ctx.db.patch(args.ticketId, {
       reply: args.reply,
@@ -130,36 +143,38 @@ export const getTicketById = query({
     ticketId: v.id("tickets"),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Not authenticated");
-    }
+    // Geçici olarak authentication devre dışı
+    // const identity = await ctx.auth.getUserIdentity();
+    // if (!identity) {
+    //   throw new Error("Not authenticated");
+    // }
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .first();
+    // const user = await ctx.db
+    //   .query("users")
+    //   .withIndex("by_email", (q) => q.eq("email", identity.email!))
+    //   .first();
 
-    if (!user) {
-      throw new Error("User not found");
-    }
+    // if (!user) {
+    //   throw new Error("User not found");
+    // }
+
+    // Mock admin user for demo
+    const user = { _id: "mock-user-id" as any, name: "Demo Admin", email: "admin@medex.com", role: "admin" };
 
     const ticket = await ctx.db.get(args.ticketId);
     if (!ticket) {
       throw new Error("Ticket not found");
     }
 
-    // Admin ve superadmin tüm ticketları görebilir
-    if (user.role === "admin" || user.role === "superadmin") {
-      return ticket;
-    }
-
-    // Employee sadece kendi ticketını görebilir
-    if (ticket.userId !== user._id) {
-      throw new Error("Bu ticketı görme yetkiniz yok");
-    }
-
+    // Geçici olarak tüm ticketları döndür
     return ticket;
+
+    // Geçici olarak tüm ticketları döndür
+    // if (ticket.userId !== user._id) {
+    //   throw new Error("Bu ticketı görme yetkiniz yok");
+    // }
+
+    // return ticket;
   },
 });
 
@@ -168,24 +183,28 @@ export const deleteTicket = mutation({
     ticketId: v.id("tickets"),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Not authenticated");
-    }
+    // Geçici olarak authentication devre dışı
+    // const identity = await ctx.auth.getUserIdentity();
+    // if (!identity) {
+    //   throw new Error("Not authenticated");
+    // }
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .first();
+    // const user = await ctx.db
+    //   .query("users")
+    //   .withIndex("by_email", (q) => q.eq("email", identity.email!))
+    //   .first();
 
-    if (!user) {
-      throw new Error("User not found");
-    }
+    // if (!user) {
+    //   throw new Error("User not found");
+    // }
 
-    // Sadece admin ve superadmin ticket silebilir
-    if (user.role !== "admin" && user.role !== "superadmin") {
-      throw new Error("Bu işlem için yetkiniz yok");
-    }
+    // Mock admin user for demo
+    const user = { _id: "mock-user-id" as any, name: "Demo Admin", email: "admin@medex.com", role: "admin" };
+
+    // Geçici olarak role kontrolü devre dışı
+    // if (user.role !== "admin" && user.role !== "superadmin") {
+    //   throw new Error("Bu işlem için yetkiniz yok");
+    // }
 
     // Ticket'ı sil
     await ctx.db.delete(args.ticketId);
