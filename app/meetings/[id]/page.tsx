@@ -21,7 +21,6 @@ export default function MeetingRoomPage({ params }: MeetingRoomPageProps) {
   const resolvedParams = use(params)
   const [isJoining, setIsJoining] = useState(false)
   const meetings = useQuery(api.meetings.getMeetings)
-  const currentUser = useQuery(api.users.getCurrentUser)
   const joinMeeting = useMutation(api.meetings.joinMeeting)
   const updateMeetingStatus = useMutation(api.meetings.updateMeetingStatus)
   const router = useRouter()

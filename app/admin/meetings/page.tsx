@@ -67,7 +67,7 @@ export default function AdminMeetingsPage() {
           <p className="text-gray-600 mb-4">Bu sayfaya erişim yetkiniz bulunmuyor.</p>
           <Link href="/meetings">
             <Button className="bg-blue-600 hover:bg-blue-700">
-              Toplantılar'a Dön
+              Toplantılar&apos;a Dön
             </Button>
           </Link>
         </div>

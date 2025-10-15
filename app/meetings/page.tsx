@@ -13,7 +13,6 @@ import Navbar from '@/components/Navbar'
 
 export default function MeetingsPage() {
   const meetings = useQuery(api.meetings.getMeetings)
-  const currentUser = useQuery(api.users.getCurrentUser)
 
   return (
     <>

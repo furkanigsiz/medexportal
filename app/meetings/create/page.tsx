@@ -23,7 +23,6 @@ export default function CreateMeetingPage() {
   const [recurrencePattern, setRecurrencePattern] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   
-  const currentUser = useQuery(api.users.getCurrentUser)
   const createMeeting = useMutation(api.meetings.createMeeting)
   const router = useRouter()
 
