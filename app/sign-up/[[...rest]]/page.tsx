@@ -13,7 +13,7 @@ export default function SignUpPage() {
 
   useEffect(() => {
     if (isSignedIn) {
-      router.push('http://localhost:3002/')
+      router.push('/')
     }
   }, [isSignedIn, router])
 

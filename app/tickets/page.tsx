@@ -5,7 +5,7 @@ import { SignInButton } from '@clerk/nextjs'
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import Navbar from '@/components/Navbar'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
@@ -17,7 +17,6 @@ import {
   Clock, 
   CheckCircle, 
   AlertCircle,
-  Filter,
   Search
 } from 'lucide-react'
 import { useState } from 'react'
@@ -50,7 +49,6 @@ export default function TicketsPage() {
 }
 
 function TicketsContent() {
-  const user = useQuery(api.users.getCurrentUser)
   const tickets = useQuery(api.tickets.getTickets)
   
   // Mock veriler
@@ -182,7 +180,7 @@ function TicketsContent() {
         <div className="space-y-4">
           {filteredTickets && filteredTickets.length > 0 ? (
             filteredTickets.map((ticket) => (
-              <TicketCard key={ticket._id} ticket={ticket} user={user} />
+              <TicketCard key={ticket._id} ticket={ticket} />
             ))
           ) : (
             <Card>
@@ -200,7 +198,7 @@ function TicketsContent() {
   )
 }
 
-function TicketCard({ ticket, user }: { ticket: { _id: string; title: string; description: string; status: string; createdAt: number; userId: string; reply?: string; updatedAt: number }, user: { _id: string; name: string; email: string; role: string } | null | undefined }) {
+function TicketCard({ ticket }: { ticket: { _id: string; title: string; description: string; status: string; createdAt: number; userId: string; reply?: string; updatedAt: number } }) {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'open':

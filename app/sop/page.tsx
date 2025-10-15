@@ -13,11 +13,9 @@ import {
   FileText, 
   Download, 
   Search,
-  Filter,
   Calendar,
   User,
-  Eye,
-  ArrowRight
+  Eye
 } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -50,7 +48,6 @@ export default function SOPPage() {
 }
 
 function SOPContent() {
-  const user = useQuery(api.users.getCurrentUser)
   const sops = useQuery(api.sops.getActiveSOPs)
   
   // Mock veriler
@@ -224,11 +221,11 @@ function SOPContent() {
                       </div>
                       <div className="flex items-center space-x-1">
                         <Calendar className="w-4 h-4" />
-                        <span>Güncellenme: {new Date(doc.updatedAt).toLocaleDateString('tr-TR')}</span>
+                        <span>Oluşturulma: {new Date(doc.createdAt).toLocaleDateString('tr-TR')}</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <Download className="w-4 h-4" />
-                        <span>{doc.downloads} indirme</span>
+                        <span>0 indirme</span>
                       </div>
                     </div>
                   </div>

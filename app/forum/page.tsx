@@ -62,7 +62,6 @@ export default function ForumPage() {
 }
 
 function ForumContent() {
-  const user = useQuery(api.users.getCurrentUser)
   const topics = useQuery(api.forum.getForumTopics)
   const addTopic = useMutation(api.forum.addForumTopic)
   
@@ -77,7 +76,9 @@ function ForumContent() {
       createdAt: Date.now() - 86400000 * 2,
       replies: 5,
       views: 23,
+      likes: 8,
       isPinned: false,
+      isHot: false,
       tags: ['ofis', 'düzenleme']
     },
     {
@@ -89,7 +90,9 @@ function ForumContent() {
       createdAt: Date.now() - 86400000 * 5,
       replies: 8,
       views: 45,
+      likes: 15,
       isPinned: true,
+      isHot: true,
       tags: ['sistem', 'güncelleme', 'IT']
     },
     {
@@ -101,7 +104,9 @@ function ForumContent() {
       createdAt: Date.now() - 86400000 * 7,
       replies: 12,
       views: 67,
+      likes: 22,
       isPinned: false,
+      isHot: true,
       tags: ['etkinlik', 'çalışan', 'sosyal']
     },
     {
@@ -113,7 +118,9 @@ function ForumContent() {
       createdAt: Date.now() - 86400000 * 10,
       replies: 6,
       views: 34,
+      likes: 4,
       isPinned: false,
+      isHot: false,
       tags: ['proje', 'yönetim', 'araç']
     },
     {
@@ -125,7 +132,9 @@ function ForumContent() {
       createdAt: Date.now() - 86400000 * 14,
       replies: 15,
       views: 89,
+      likes: 31,
       isPinned: false,
+      isHot: true,
       tags: ['uzaktan', 'çalışma', 'deneyim']
     }
   ]
