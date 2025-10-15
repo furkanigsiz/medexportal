@@ -1,7 +1,8 @@
 'use client'
 
-import { Authenticated, Unauthenticated } from 'convex/react'
-import { SignInButton } from '@clerk/nextjs'
+// Geçici olarak authentication devre dışı
+// import { Authenticated, Unauthenticated } from 'convex/react'
+// import { SignInButton } from '@clerk/nextjs'
 import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import Navbar from '@/components/Navbar'
@@ -18,13 +19,17 @@ import {
 import Link from 'next/link'
 
 export default function NewsPage() {
+  // Geçici olarak authentication devre dışı - direkt content göster
   return (
     <>
-      <Authenticated>
-        <Navbar />
-        <NewsContent />
-      </Authenticated>
-      <Unauthenticated>
+      <Navbar />
+      <NewsContent />
+    </>
+  )
+}
+
+function UnauthenticatedNews() {
+  return (
         <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FFFFFF' }}>
           <div className="text-center">
             <div className="w-16 h-16 bg-medex-navy rounded-2xl flex items-center justify-center mx-auto mb-6">
@@ -32,15 +37,11 @@ export default function NewsPage() {
             </div>
             <h1 className="text-4xl font-bold text-medex-navy mb-4">Medex Portal</h1>
             <p className="text-gray-600 mb-8">Şirket içi intranet portalına hoş geldiniz</p>
-            <SignInButton mode="modal">
-              <Button size="lg" className="bg-medex-navy hover:bg-medex-blue text-white">
-                Giriş Yap
-              </Button>
-            </SignInButton>
+            <Button size="lg" className="bg-medex-navy hover:bg-medex-blue text-white">
+              Giriş Yap
+            </Button>
           </div>
         </div>
-      </Unauthenticated>
-    </>
   )
 }
 

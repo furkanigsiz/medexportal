@@ -1,6 +1,7 @@
 'use client'
 
-import { Authenticated, Unauthenticated } from 'convex/react'
+// Geçici olarak authentication devre dışı
+// import { Authenticated, Unauthenticated } from 'convex/react'
 import { useQuery } from 'convex/react'
 import Link from 'next/link'
 import { api } from '../convex/_generated/api'
@@ -31,14 +32,18 @@ import {
 import { useState, useEffect } from 'react'
 
 export default function Home() {
+  // Geçici olarak authentication devre dışı - direkt dashboard göster
   return (
     <>
-      <Authenticated>
-        <UserInitializer />
-        <Navbar />
-        <Dashboard />
-      </Authenticated>
-      <Unauthenticated>
+      {/* <UserInitializer /> */}
+      <Navbar />
+      <Dashboard />
+    </>
+  )
+}
+
+function UnauthenticatedHome() {
+  return (
         <div className="min-h-screen bg-gradient-to-br from-medex-navy via-medex-dark to-medex-navy flex items-center justify-center p-4 relative overflow-hidden">
           {/* Arka plan deseni */}
           <div className="absolute inset-0 bg-gradient-to-br from-medex-navy/90 to-medex-dark/90"></div>
@@ -104,8 +109,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </Unauthenticated>
-    </>
   )
 }
 

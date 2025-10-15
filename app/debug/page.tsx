@@ -1,24 +1,35 @@
 'use client'
 
-import { useUser, SignOutButton } from '@clerk/nextjs'
+// Geçici olarak Clerk devre dışı
+// import { useUser, SignOutButton } from '@clerk/nextjs'
 import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { Button } from '@/components/ui/button'
 
 export default function DebugPage() {
-  const { user, isLoaded } = useUser()
+  // Geçici olarak Clerk devre dışı
+  // const { user, isLoaded } = useUser()
   const convexUser = useQuery(api.users.getCurrentUser)
+  
+  // Mock user for demo
+  const user = { 
+    firstName: 'Demo', 
+    lastName: 'User', 
+    fullName: 'Demo User',
+    id: 'demo-user-id',
+    emailAddresses: [{ emailAddress: 'demo@medex.com' }],
+    primaryEmailAddress: { emailAddress: 'demo@medex.com' }
+  }
+  const isLoaded = true
 
   return (
     <div className="min-h-screen bg-white p-8">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Debug Sayfası</h1>
-          <SignOutButton>
-            <Button variant="outline" size="sm">
-              Çıkış Yap
-            </Button>
-          </SignOutButton>
+          <Button variant="outline" size="sm">
+            Çıkış Yap
+          </Button>
         </div>
         
         <div className="space-y-6">

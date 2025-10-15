@@ -1,7 +1,8 @@
 'use client'
 
-import { UserButton, SignInButton } from '@clerk/nextjs'
-import { useUser } from '@clerk/nextjs'
+// Geçici olarak Clerk devre dışı
+// import { UserButton, SignInButton } from '@clerk/nextjs'
+// import { useUser } from '@clerk/nextjs'
 import { useQuery } from 'convex/react'
 import { api } from '../convex/_generated/api'
 import { Button } from '@/components/ui/button'
@@ -21,9 +22,14 @@ import PillNav from './PillNav'
 import { usePathname } from 'next/navigation'
 
 export default function Navbar() {
-  const { user, isLoaded } = useUser()
+  // Geçici olarak Clerk devre dışı
+  // const { user, isLoaded } = useUser()
   const currentUser = useQuery(api.users.getCurrentUser)
   const pathname = usePathname()
+  
+  // Mock user for demo
+  const user = { firstName: 'Demo', lastName: 'User', emailAddresses: [{ emailAddress: 'demo@medex.com' }] }
+  const isLoaded = true
 
   // Tüm sayfalarımızı içeren navigation items
   const navItems = [
@@ -90,7 +96,11 @@ export default function Navbar() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="flex items-center space-x-2 hover:bg-gray-100 p-2">
-                      <UserButton />
+                      <div className="w-8 h-8 bg-medex-navy rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-sm">
+                          {user?.firstName?.charAt(0) || 'D'}
+                        </span>
+                      </div>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56 z-[9999] bg-white shadow-xl border border-gray-200 rounded-md">
@@ -112,11 +122,9 @@ export default function Navbar() {
                 </DropdownMenu>
               </div>
             ) : (
-              <SignInButton mode="modal">
-                <Button className="text-white shadow-lg" style={{ backgroundColor: '#003466' }}>
-                  Giriş Yap
-                </Button>
-              </SignInButton>
+              <Button className="text-white shadow-lg" style={{ backgroundColor: '#003466' }}>
+                Giriş Yap
+              </Button>
             )}
           </div>
         </div>

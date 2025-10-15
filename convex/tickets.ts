@@ -4,30 +4,34 @@ import { v } from "convex/values";
 export const getTickets = query({
   args: {},
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Not authenticated");
-    }
+    // Geçici olarak authentication devre dışı
+    // const identity = await ctx.auth.getUserIdentity();
+    // if (!identity) {
+    //   throw new Error("Not authenticated");
+    // }
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .first();
+    // const user = await ctx.db
+    //   .query("users")
+    //   .withIndex("by_email", (q) => q.eq("email", identity.email!))
+    //   .first();
 
-    if (!user) {
-      throw new Error("User not found");
-    }
+    // if (!user) {
+    //   throw new Error("User not found");
+    // }
 
+    // Geçici olarak tüm ticketları döndür
+    return await ctx.db.query("tickets").collect();
+    
     // Admin ve superadmin tüm ticketları görebilir
-    if (user.role === "admin" || user.role === "superadmin") {
-      return await ctx.db.query("tickets").collect();
-    }
+    // if (user.role === "admin" || user.role === "superadmin") {
+    //   return await ctx.db.query("tickets").collect();
+    // }
 
     // Employee sadece kendi ticketlarını görebilir
-    return await ctx.db
-      .query("tickets")
-      .withIndex("by_user", (q) => q.eq("userId", user._id))
-      .collect();
+    // return await ctx.db
+    //   .query("tickets")
+    //   .withIndex("by_user", (q) => q.eq("userId", user._id))
+    //   .collect();
   },
 });
 
