@@ -57,7 +57,7 @@ function AdminContent() {
   const events = useQuery(api.events.getEvents)
   const tickets = useQuery(api.tickets.getTickets)
   const documents = useQuery(api.documents.getDocuments)
-  const meetings = useQuery(api.meetings.getMeetings)
+  const meetings = useQuery(api.meetings.getMeetings, {})
 
   // Admin yetkisi kontrolü
   if (user && (user.role !== 'admin' && user.role !== 'superadmin')) {

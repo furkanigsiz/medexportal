@@ -14,24 +14,63 @@ export const createMeeting = mutation({
     recurrencePattern: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    // Demo için mock user kullan
+    // Mevcut kullanıcıyı al veya mock user oluştur
     let organizerId;
-    
-    // Demo user'ı bul veya oluştur
-    const existingUser = await ctx.db
-      .query("users")
-      .filter((q) => q.eq(q.field("email"), "demo@medex.com"))
-      .first();
-    
-    if (existingUser) {
-      organizerId = existingUser._id;
-    } else {
-      organizerId = await ctx.db.insert("users", {
-        name: "Demo User",
-        email: "demo@medex.com",
-        role: "employee",
-        createdAt: Date.now(),
-      });
+    try {
+      const currentUser = await ctx.auth.getUserIdentity();
+      if (currentUser) {
+        // Gerçek kullanıcı varsa onu kullan
+        const user = await ctx.db
+          .query("users")
+          .filter((q) => q.eq(q.field("email"), currentUser.email))
+          .first();
+        
+        if (user) {
+          organizerId = user._id;
+        } else {
+          // Kullanıcı yoksa oluştur
+          organizerId = await ctx.db.insert("users", {
+            name: currentUser.name || "Demo User",
+            email: currentUser.email || "demo@medex.com",
+            role: "employee",
+            createdAt: Date.now(),
+          });
+        }
+      } else {
+        // Auth yoksa mock user oluştur
+        const existingUser = await ctx.db
+          .query("users")
+          .filter((q) => q.eq(q.field("email"), "demo@medex.com"))
+          .first();
+        
+        if (existingUser) {
+          organizerId = existingUser._id;
+        } else {
+          organizerId = await ctx.db.insert("users", {
+            name: "Demo User",
+            email: "demo@medex.com",
+            role: "employee",
+            createdAt: Date.now(),
+          });
+        }
+      }
+    } catch (error) {
+      // Auth hatası durumunda mock user oluştur
+      const existingUser = await ctx.db
+        .query("users")
+        .filter((q) => q.eq(q.field("email"), "demo@medex.com"))
+        .first();
+      
+      if (existingUser) {
+        organizerId = existingUser._id;
+      } else {
+        organizerId = await ctx.db.insert("users", {
+          name: "Demo User",
+          email: "demo@medex.com",
+          role: "employee",
+          createdAt: Date.now(),
+        });
+      }
     }
     
     const meetingId = `medex-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -60,9 +99,16 @@ export const createMeeting = mutation({
 
 // Toplantıları getirme
 export const getMeetings = query({
-  args: {},
-  handler: async (ctx) => {
-    // Tüm toplantıları döndür
+  args: {
+    status: v.optional(v.union(
+      v.literal("scheduled"), 
+      v.literal("ongoing"), 
+      v.literal("completed"), 
+      v.literal("cancelled")
+    )),
+  },
+  handler: async (ctx, args) => {
+    // Geçici olarak tüm toplantıları döndür
     return await ctx.db.query("meetings").collect();
   },
 });
