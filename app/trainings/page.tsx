@@ -5,25 +5,21 @@ import { SignInButton } from '@clerk/nextjs'
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import Navbar from '@/components/Navbar'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { 
   Play, 
   Plus, 
   Search,
-  Filter,
   Clock,
   User,
   BookOpen,
-  Star,
   Download,
   Eye,
-  XCircle,
-  Shield
+  XCircle
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -59,6 +55,77 @@ function TrainingsContent() {
   const trainings = useQuery(api.trainings.getTrainings)
   const addTraining = useMutation(api.trainings.addTraining)
   
+  // Mock veriler
+  const mockTrainings = [
+    {
+      _id: 'mock-1',
+      title: 'Proje Yönetimi Temelleri',
+      description: 'Proje yönetiminin temel prensipleri ve metodolojileri hakkında kapsamlı eğitim',
+      content: 'Bu eğitimde proje yönetiminin temel kavramları, proje yaşam döngüsü, risk yönetimi ve ekip yönetimi konuları ele alınacak.',
+      category: 'technical',
+      duration: '4 saat',
+      difficulty: 'beginner',
+      instructor: 'Ahmet Yılmaz',
+      videoUrl: 'https://youtube.com/watch?v=example1',
+      materials: ['Proje Yönetimi Rehberi', 'Risk Analizi Şablonu'],
+      createdAt: Date.now() - 86400000 * 5
+    },
+    {
+      _id: 'mock-2',
+      title: 'Liderlik Becerileri',
+      description: 'Etkili liderlik ve takım yönetimi becerileri',
+      content: 'Liderlik stilleri, motivasyon teknikleri, çatışma yönetimi ve etkili iletişim konularında pratik eğitim.',
+      category: 'soft-skills',
+      duration: '6 saat',
+      difficulty: 'intermediate',
+      instructor: 'Ayşe Demir',
+      videoUrl: 'https://youtube.com/watch?v=example2',
+      materials: ['Liderlik Değerlendirme Formu', 'Takım Dinamikleri Rehberi'],
+      createdAt: Date.now() - 86400000 * 7
+    },
+    {
+      _id: 'mock-3',
+      title: 'Güvenlik Protokolleri',
+      description: 'İş güvenliği ve acil durum prosedürleri',
+      content: 'İş yerinde güvenlik, acil durum müdahale, yangın güvenliği ve kişisel koruyucu ekipman kullanımı.',
+      category: 'safety',
+      duration: '3 saat',
+      difficulty: 'beginner',
+      instructor: 'Güvenlik Departmanı',
+      videoUrl: undefined,
+      materials: ['Güvenlik El Kitabı', 'Acil Durum Planı'],
+      createdAt: Date.now() - 86400000 * 10
+    },
+    {
+      _id: 'mock-4',
+      title: 'Dijital Dönüşüm Stratejileri',
+      description: 'Kurumsal dijital dönüşüm süreçleri ve stratejileri',
+      content: 'Dijital teknolojilerin iş süreçlerine entegrasyonu, veri analizi ve dijital pazarlama stratejileri.',
+      category: 'technical',
+      duration: '8 saat',
+      difficulty: 'advanced',
+      instructor: 'Dr. Mehmet Kaya',
+      videoUrl: 'https://youtube.com/watch?v=example4',
+      materials: ['Dijital Dönüşüm Çerçevesi', 'Teknoloji Trendleri Raporu'],
+      createdAt: Date.now() - 86400000 * 3
+    },
+    {
+      _id: 'mock-5',
+      title: 'Müşteri Hizmetleri Mükemmelliği',
+      description: 'Üstün müşteri deneyimi yaratma teknikleri',
+      content: 'Müşteri beklentilerini anlama, etkili iletişim, sorun çözme ve müşteri memnuniyeti artırma yöntemleri.',
+      category: 'soft-skills',
+      duration: '5 saat',
+      difficulty: 'intermediate',
+      instructor: 'Zeynep Ak',
+      videoUrl: 'https://youtube.com/watch?v=example5',
+      materials: ['Müşteri Hizmetleri Rehberi', 'İletişim Teknikleri'],
+      createdAt: Date.now() - 86400000 * 14
+    }
+  ]
+  
+  // Gerçek veriler yoksa mock verileri kullan
+  const displayTrainings = trainings && trainings.length > 0 ? trainings : mockTrainings
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [selectedDifficulty, setSelectedDifficulty] = useState('all')
@@ -95,7 +162,7 @@ function TrainingsContent() {
   ]
 
   // Filtreleme
-  const filteredTrainings = trainings?.filter(training => {
+  const filteredTrainings = displayTrainings?.filter(training => {
     const matchesSearch = training.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          training.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          training.instructor.toLowerCase().includes(searchTerm.toLowerCase())
@@ -372,7 +439,7 @@ function TrainingsContent() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Zorluk</label>
                     <select
                       value={newTraining.difficulty}
-                      onChange={(e) => setNewTraining({...newTraining, difficulty: e.target.value as any})}
+                      onChange={(e) => setNewTraining({...newTraining, difficulty: e.target.value as 'beginner' | 'intermediate' | 'advanced'})}
                       className="w-full p-2 border border-gray-300 rounded-md"
                     >
                       <option value="beginner">Başlangıç</option>

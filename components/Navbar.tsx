@@ -5,7 +5,6 @@ import { useUser } from '@clerk/nextjs'
 import { useQuery } from 'convex/react'
 import { api } from '../convex/_generated/api'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -17,6 +16,7 @@ import {
   Users
 } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import PillNav from './PillNav'
 import { usePathname } from 'next/navigation'
 
@@ -54,9 +54,11 @@ export default function Navbar() {
           {/* Medex Logo - Ayrı konumlandırılmış */}
           <div className="flex items-center space-x-4">
             <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-              <img 
+              <Image 
                 src="/medex-logo.png" 
                 alt="MEDEX Logo" 
+                width={200}
+                height={48}
                 className="h-12 w-auto object-contain"
                 style={{ minWidth: '120px', maxWidth: '200px' }}
               />

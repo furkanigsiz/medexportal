@@ -65,6 +65,73 @@ function ForumContent() {
   const user = useQuery(api.users.getCurrentUser)
   const topics = useQuery(api.forum.getForumTopics)
   const addTopic = useMutation(api.forum.addForumTopic)
+  
+  // Mock veriler
+  const mockTopics = [
+    {
+      _id: 'mock-1',
+      title: 'Yeni Ofis Düzenlemesi Hakkında',
+      content: 'Yeni ofis düzenlemesi ile ilgili görüşlerinizi paylaşabilir misiniz? Hangi alanların iyileştirilmesi gerekiyor?',
+      category: 'general',
+      author: 'Ahmet Yılmaz',
+      createdAt: Date.now() - 86400000 * 2,
+      replies: 5,
+      views: 23,
+      isPinned: false,
+      tags: ['ofis', 'düzenleme']
+    },
+    {
+      _id: 'mock-2',
+      title: 'IT Sistem Güncellemeleri',
+      content: 'Bu hafta yapılacak sistem güncellemeleri hakkında bilgi paylaşımı. Sorularınızı burada sorabilirsiniz.',
+      category: 'technical',
+      author: 'IT Departmanı',
+      createdAt: Date.now() - 86400000 * 5,
+      replies: 8,
+      views: 45,
+      isPinned: true,
+      tags: ['sistem', 'güncelleme', 'IT']
+    },
+    {
+      _id: 'mock-3',
+      title: 'Çalışan Etkinlik Önerileri',
+      content: 'Bu ay düzenlenecek çalışan etkinlikleri için önerilerinizi bekliyoruz. Hangi aktiviteleri tercih edersiniz?',
+      category: 'hr',
+      author: 'İK Departmanı',
+      createdAt: Date.now() - 86400000 * 7,
+      replies: 12,
+      views: 67,
+      isPinned: false,
+      tags: ['etkinlik', 'çalışan', 'sosyal']
+    },
+    {
+      _id: 'mock-4',
+      title: 'Proje Yönetimi Araçları',
+      content: 'Hangi proje yönetimi araçlarını kullanıyorsunuz? Deneyimlerinizi paylaşır mısınız?',
+      category: 'technical',
+      author: 'Proje Yöneticisi',
+      createdAt: Date.now() - 86400000 * 10,
+      replies: 6,
+      views: 34,
+      isPinned: false,
+      tags: ['proje', 'yönetim', 'araç']
+    },
+    {
+      _id: 'mock-5',
+      title: 'Uzaktan Çalışma Deneyimleri',
+      content: 'Uzaktan çalışma sürecindeki deneyimlerinizi ve önerilerinizi paylaşabilir misiniz?',
+      category: 'general',
+      author: 'Mehmet Kaya',
+      createdAt: Date.now() - 86400000 * 14,
+      replies: 15,
+      views: 89,
+      isPinned: false,
+      tags: ['uzaktan', 'çalışma', 'deneyim']
+    }
+  ]
+  
+  // Gerçek veriler yoksa mock verileri kullan
+  const displayTopics = topics && topics.length > 0 ? topics : mockTopics
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [isAddingTopic, setIsAddingTopic] = useState(false)
@@ -77,16 +144,16 @@ function ForumContent() {
 
   // Forum kategorileri
   const forumCategories = [
-    { id: 'all', name: 'Tüm Kategoriler', count: topics?.length || 0 },
-    { id: 'general', name: 'Genel Tartışma', count: topics?.filter(t => t.category === 'general').length || 0 },
-    { id: 'technical', name: 'Teknik Destek', count: topics?.filter(t => t.category === 'technical').length || 0 },
-    { id: 'hr', name: 'İnsan Kaynakları', count: topics?.filter(t => t.category === 'hr').length || 0 },
-    { id: 'announcements', name: 'Duyurular', count: topics?.filter(t => t.category === 'announcements').length || 0 },
-    { id: 'suggestions', name: 'Öneriler', count: topics?.filter(t => t.category === 'suggestions').length || 0 },
+    { id: 'all', name: 'Tüm Kategoriler', count: displayTopics?.length || 0 },
+    { id: 'general', name: 'Genel Tartışma', count: displayTopics?.filter(t => t.category === 'general').length || 0 },
+    { id: 'technical', name: 'Teknik Destek', count: displayTopics?.filter(t => t.category === 'technical').length || 0 },
+    { id: 'hr', name: 'İnsan Kaynakları', count: displayTopics?.filter(t => t.category === 'hr').length || 0 },
+    { id: 'announcements', name: 'Duyurular', count: displayTopics?.filter(t => t.category === 'announcements').length || 0 },
+    { id: 'suggestions', name: 'Öneriler', count: displayTopics?.filter(t => t.category === 'suggestions').length || 0 },
   ]
 
   // Filtreleme
-  const filteredTopics = topics?.filter(topic => {
+  const filteredTopics = displayTopics?.filter(topic => {
     const matchesSearch = topic.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          topic.content.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory === 'all' || topic.category === selectedCategory

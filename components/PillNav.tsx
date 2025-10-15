@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { gsap } from 'gsap';
 import './PillNav.css';
 
@@ -226,15 +227,7 @@ const PillNav: React.FC<PillNavProps> = ({
     onMobileMenuClick?.();
   };
 
-  const isExternalLink = (href: string) =>
-    href.startsWith('http://') ||
-    href.startsWith('https://') ||
-    href.startsWith('//') ||
-    href.startsWith('mailto:') ||
-    href.startsWith('tel:') ||
-    href.startsWith('#');
 
-  const isRouterLink = (href?: string) => href && !isExternalLink(href);
 
   const cssVars = {
     ['--base']: baseColor,
@@ -257,7 +250,13 @@ const PillNav: React.FC<PillNavProps> = ({
               logoRef.current = el;
             }}
           >
-            <img src={logo} alt={logoAlt} ref={logoImgRef} />
+            <Image 
+              src={logo} 
+              alt={logoAlt} 
+              width={120}
+              height={48}
+              ref={logoImgRef} 
+            />
           </Link>
         )}
 

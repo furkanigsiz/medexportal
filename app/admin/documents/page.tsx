@@ -234,7 +234,7 @@ function AddDocumentDialog() {
         <DialogHeader>
           <DialogTitle>Yeni Döküman Ekle</DialogTitle>
           <DialogDescription>
-            Google Drive'dan bir döküman ekleyin ve erişim seviyesini belirleyin.
+            Google Drive&apos;dan bir döküman ekleyin ve erişim seviyesini belirleyin.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">

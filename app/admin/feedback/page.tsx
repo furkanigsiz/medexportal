@@ -4,6 +4,7 @@ import { Authenticated, Unauthenticated } from 'convex/react'
 import { SignInButton } from '@clerk/nextjs'
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../../convex/_generated/api'
+import { Id } from '../../../convex/_generated/dataModel'
 import Navbar from '@/components/Navbar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -55,6 +56,7 @@ function AdminFeedbackContent() {
   const user = useQuery(api.users.getCurrentUser)
   const feedback = useQuery(api.feedback.getFeedback)
   const updateFeedback = useMutation(api.feedback.updateFeedback)
+  const deleteFeedback = useMutation(api.feedback.deleteFeedback)
   
   const [respondingTo, setRespondingTo] = useState<string | null>(null)
   const [responseText, setResponseText] = useState('')
@@ -109,7 +111,7 @@ function AdminFeedbackContent() {
   const handleStatusUpdate = async (feedbackId: string, newStatus: string) => {
     try {
       await updateFeedback({
-        id: feedbackId as any,
+        id: feedbackId as Id<"feedback">,
         status: newStatus as 'open' | 'in_progress' | 'resolved' | 'closed'
       })
     } catch (error) {
@@ -125,7 +127,7 @@ function AdminFeedbackContent() {
 
     try {
       await updateFeedback({
-        id: feedbackId as any,
+        id: feedbackId as Id<"feedback">,
         response: responseText.trim()
       })
       setResponseText('')
@@ -220,7 +222,22 @@ function AdminFeedbackContent() {
                           <Edit className="w-4 h-4 mr-1" />
                           Yanıtla
                         </Button>
-                        <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="text-red-600 hover:text-red-700"
+                          onClick={async () => {
+                            if (confirm('Bu geri bildirimi silmek istediğinizden emin misiniz?')) {
+                              try {
+                                await deleteFeedback({ feedbackId: item._id as Id<"feedback"> })
+                                alert('Geri bildirim başarıyla silindi!')
+                              } catch (error) {
+                                console.error('Error deleting feedback:', error)
+                                alert('Geri bildirim silinirken bir hata oluştu')
+                              }
+                            }
+                          }}
+                        >
                           <Trash2 className="w-4 h-4 mr-1" />
                           Sil
                         </Button>

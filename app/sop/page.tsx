@@ -52,20 +52,72 @@ export default function SOPPage() {
 function SOPContent() {
   const user = useQuery(api.users.getCurrentUser)
   const sops = useQuery(api.sops.getActiveSOPs)
+  
+  // Mock veriler
+  const mockSOPs = [
+    {
+      _id: 'mock-1',
+      title: 'İnsan Kaynakları Onboarding Prosedürü',
+      description: 'Yeni çalışanların işe alım süreci ve oryantasyon prosedürleri',
+      category: 'hr',
+      version: '2.1',
+      author: 'İK Departmanı',
+      createdAt: Date.now() - 86400000 * 5
+    },
+    {
+      _id: 'mock-2',
+      title: 'IT Sistem Güvenlik Protokolleri',
+      description: 'Bilgi güvenliği ve sistem erişim kontrolü prosedürleri',
+      category: 'it',
+      version: '1.5',
+      author: 'IT Departmanı',
+      createdAt: Date.now() - 86400000 * 3
+    },
+    {
+      _id: 'mock-3',
+      title: 'Mali Raporlama ve Bütçe Yönetimi',
+      description: 'Aylık mali raporların hazırlanması ve bütçe kontrolü süreçleri',
+      category: 'finance',
+      version: '3.0',
+      author: 'Mali İşler',
+      createdAt: Date.now() - 86400000 * 7
+    },
+    {
+      _id: 'mock-4',
+      title: 'Operasyonel Kalite Kontrol',
+      description: 'Üretim süreçlerinde kalite kontrol ve iyileştirme prosedürleri',
+      category: 'operations',
+      version: '1.8',
+      author: 'Operasyon Müdürü',
+      createdAt: Date.now() - 86400000 * 10
+    },
+    {
+      _id: 'mock-5',
+      title: 'Acil Durum Müdahale Prosedürü',
+      description: 'Güvenlik ve acil durum müdahale protokolleri',
+      category: 'hr',
+      version: '2.0',
+      author: 'Güvenlik Departmanı',
+      createdAt: Date.now() - 86400000 * 14
+    }
+  ]
+  
+  // Gerçek veriler yoksa mock verileri kullan
+  const displaySOPs = sops && sops.length > 0 ? sops : mockSOPs
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
 
   // SOP kategorileri
   const sopCategories = [
-    { id: 'all', name: 'Tüm Kategoriler', count: sops?.length || 0 },
-    { id: 'hr', name: 'İnsan Kaynakları', count: sops?.filter(s => s.category === 'hr').length || 0 },
-    { id: 'it', name: 'Bilgi İşlem', count: sops?.filter(s => s.category === 'it').length || 0 },
-    { id: 'finance', name: 'Mali İşler', count: sops?.filter(s => s.category === 'finance').length || 0 },
-    { id: 'operations', name: 'Operasyonlar', count: sops?.filter(s => s.category === 'operations').length || 0 },
+    { id: 'all', name: 'Tüm Kategoriler', count: displaySOPs?.length || 0 },
+    { id: 'hr', name: 'İnsan Kaynakları', count: displaySOPs?.filter(s => s.category === 'hr').length || 0 },
+    { id: 'it', name: 'Bilgi İşlem', count: displaySOPs?.filter(s => s.category === 'it').length || 0 },
+    { id: 'finance', name: 'Mali İşler', count: displaySOPs?.filter(s => s.category === 'finance').length || 0 },
+    { id: 'operations', name: 'Operasyonlar', count: displaySOPs?.filter(s => s.category === 'operations').length || 0 },
   ]
 
   // Filtreleme
-  const filteredSOPs = sops?.filter(doc => {
+  const filteredSOPs = displaySOPs?.filter(doc => {
     const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          doc.description.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory === 'all' || doc.category === selectedCategory

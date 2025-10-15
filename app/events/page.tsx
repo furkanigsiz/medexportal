@@ -47,9 +47,51 @@ export default function EventsPage() {
 
 function EventsContent() {
   const events = useQuery(api.events.getEvents)
+  
+  // Mock veriler
+  const mockEvents = [
+    {
+      _id: 'mock-1',
+      title: 'Yıllık Şirket Toplantısı',
+      date: '2024-02-15',
+      location: 'Ana Ofis - Konferans Salonu',
+      createdAt: Date.now() - 86400000 * 5
+    },
+    {
+      _id: 'mock-2',
+      title: 'IT Güvenlik Eğitimi',
+      date: '2024-02-20',
+      location: 'Eğitim Salonu A',
+      createdAt: Date.now() - 86400000 * 3
+    },
+    {
+      _id: 'mock-3',
+      title: 'Takım Building Etkinliği',
+      date: '2024-02-25',
+      location: 'Spor Salonu',
+      createdAt: Date.now() - 86400000 * 7
+    },
+    {
+      _id: 'mock-4',
+      title: 'Yeni Ürün Lansmanı',
+      date: '2024-03-01',
+      location: 'Ana Ofis - Büyük Salon',
+      createdAt: Date.now() - 86400000 * 2
+    },
+    {
+      _id: 'mock-5',
+      title: 'Çalışan Sağlık Taraması',
+      date: '2024-03-05',
+      location: 'Sağlık Merkezi',
+      createdAt: Date.now() - 86400000 * 10
+    }
+  ]
+  
+  // Gerçek veriler yoksa mock verileri kullan
+  const displayEvents = events && events.length > 0 ? events : mockEvents
   const [searchTerm, setSearchTerm] = useState('')
 
-  const filteredEvents = events?.filter(event => 
+  const filteredEvents = displayEvents?.filter(event => 
     event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     event.location.toLowerCase().includes(searchTerm.toLowerCase())
   )
@@ -104,7 +146,7 @@ function EventsContent() {
   )
 }
 
-function EventCard({ event }: { event: any }) {
+function EventCard({ event }: { event: { _id: string; title: string; date: string; location: string; createdAt: number } }) {
   const eventDate = new Date(event.date)
   const now = new Date()
   const isUpcoming = eventDate >= now

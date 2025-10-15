@@ -52,10 +52,67 @@ export default function TicketsPage() {
 function TicketsContent() {
   const user = useQuery(api.users.getCurrentUser)
   const tickets = useQuery(api.tickets.getTickets)
+  
+  // Mock veriler
+  const mockTickets = [
+    {
+      _id: 'mock-1',
+      title: 'Bilgisayar Performans Sorunu',
+      description: 'Laptopum çok yavaş çalışıyor ve sık sık donuyor. Acil çözüm gerekiyor.',
+      status: 'open',
+      createdAt: Date.now() - 86400000 * 2,
+      userId: 'user-1',
+      reply: undefined,
+      updatedAt: Date.now() - 86400000 * 2
+    },
+    {
+      _id: 'mock-2',
+      title: 'E-posta Erişim Sorunu',
+      description: 'Outlook uygulamasına giriş yapamıyorum. Şifre sıfırlama gerekebilir.',
+      status: 'in_progress',
+      createdAt: Date.now() - 86400000 * 5,
+      userId: 'user-2',
+      reply: 'Sorununuz inceleniyor. En kısa sürede çözüm sağlanacak.',
+      updatedAt: Date.now() - 86400000 * 1
+    },
+    {
+      _id: 'mock-3',
+      title: 'Yazıcı Bağlantı Problemi',
+      description: 'Ofis yazıcısına bağlanamıyorum. Ağ ayarlarında sorun olabilir.',
+      status: 'closed',
+      createdAt: Date.now() - 86400000 * 10,
+      userId: 'user-3',
+      reply: 'Sorun çözüldü. Yazıcı ayarları güncellendi.',
+      updatedAt: Date.now() - 86400000 * 3
+    },
+    {
+      _id: 'mock-4',
+      title: 'VPN Bağlantı Hatası',
+      description: 'Evden çalışırken VPN bağlantısı kurulamıyor.',
+      status: 'open',
+      createdAt: Date.now() - 86400000 * 1,
+      userId: 'user-4',
+      reply: undefined,
+      updatedAt: Date.now() - 86400000 * 1
+    },
+    {
+      _id: 'mock-5',
+      title: 'Yazılım Lisans Sorunu',
+      description: 'Adobe Creative Suite lisansı süresi dolmuş görünüyor.',
+      status: 'in_progress',
+      createdAt: Date.now() - 86400000 * 7,
+      userId: 'user-5',
+      reply: 'Lisans yenileme işlemi başlatıldı.',
+      updatedAt: Date.now() - 86400000 * 2
+    }
+  ]
+  
+  // Gerçek veriler yoksa mock verileri kullan
+  const displayTickets = tickets && tickets.length > 0 ? tickets : mockTickets
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
 
-  const filteredTickets = tickets?.filter(ticket => {
+  const filteredTickets = displayTickets?.filter(ticket => {
     const matchesSearch = ticket.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          ticket.description.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = statusFilter === 'all' || ticket.status === statusFilter
@@ -143,7 +200,7 @@ function TicketsContent() {
   )
 }
 
-function TicketCard({ ticket, user }: { ticket: any, user: any }) {
+function TicketCard({ ticket, user }: { ticket: { _id: string; title: string; description: string; status: string; createdAt: number; userId: string; reply?: string; updatedAt: number }, user: { _id: string; name: string; email: string; role: string } | null | undefined }) {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'open':

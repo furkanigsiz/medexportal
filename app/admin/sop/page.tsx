@@ -129,7 +129,7 @@ function AdminSOPContent() {
               <CardContent className="text-center py-12">
                 <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Henüz SOP bulunmuyor</h3>
-                <p className="text-gray-600 mb-4">İlk SOP'unuzu eklemek için yukarıdaki butonu kullanın</p>
+                <p className="text-gray-600 mb-4">İlk SOP&apos;unuzu eklemek için yukarıdaki butonu kullanın</p>
                 <AddSOPDialog />
               </CardContent>
             </Card>
@@ -145,7 +145,7 @@ function AddSOPDialog() {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [content, setContent] = useState('')
-  const createSOP = useMutation(api.sops.createSOP)
+  const createSOP = useMutation(api.sops.addSOP)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -156,6 +156,9 @@ function AddSOPDialog() {
         title: title.trim(),
         description: description.trim(),
         content: content.trim(),
+        author: 'Admin',
+        category: 'general',
+        version: '1.0',
       })
       setTitle('')
       setDescription('')

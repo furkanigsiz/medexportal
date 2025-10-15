@@ -48,9 +48,51 @@ export default function DocumentsPage() {
 
 function DocumentsContent() {
   const documents = useQuery(api.documents.getDocuments)
+  
+  // Mock veriler
+  const mockDocuments = [
+    {
+      _id: 'mock-1',
+      title: 'İnsan Kaynakları Politikaları',
+      driveFileId: 'mock-drive-1',
+      accessLevel: 'all',
+      createdAt: Date.now() - 86400000 * 7
+    },
+    {
+      _id: 'mock-2', 
+      title: 'Güvenlik Prosedürleri',
+      driveFileId: 'mock-drive-2',
+      accessLevel: 'admin',
+      createdAt: Date.now() - 86400000 * 3
+    },
+    {
+      _id: 'mock-3',
+      title: 'Çalışan El Kitabı',
+      driveFileId: 'mock-drive-3', 
+      accessLevel: 'all',
+      createdAt: Date.now() - 86400000 * 14
+    },
+    {
+      _id: 'mock-4',
+      title: 'IT Güvenlik Rehberi',
+      driveFileId: 'mock-drive-4',
+      accessLevel: 'admin',
+      createdAt: Date.now() - 86400000 * 5
+    },
+    {
+      _id: 'mock-5',
+      title: 'Yeni Çalışan Oryantasyonu',
+      driveFileId: 'mock-drive-5',
+      accessLevel: 'all', 
+      createdAt: Date.now() - 86400000 * 10
+    }
+  ]
+  
+  // Gerçek veriler yoksa mock verileri kullan
+  const displayDocuments = documents && documents.length > 0 ? documents : mockDocuments
   const [searchTerm, setSearchTerm] = useState('')
 
-  const filteredDocuments = documents?.filter(doc => 
+  const filteredDocuments = displayDocuments?.filter(doc => 
     doc.title.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
@@ -99,7 +141,7 @@ function DocumentsContent() {
   )
 }
 
-function DocumentCard({ document }: { document: any }) {
+function DocumentCard({ document }: { document: { _id: string; title: string; driveFileId: string; accessLevel: string; createdAt: number } }) {
   const getFileIcon = (title: string) => {
     const extension = title.split('.').pop()?.toLowerCase()
     switch (extension) {

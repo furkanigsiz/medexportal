@@ -70,7 +70,7 @@ export default function DebugPage() {
               {!convexUser && (
                 <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
                   <p className="text-yellow-800">
-                    <strong>Not:</strong> Kullanıcı Convex'te bulunamadı. Ana sayfaya gidip tekrar deneyin.
+                    <strong>Not:</strong> Kullanıcı Convex&apos;te bulunamadı. Ana sayfaya gidip tekrar deneyin.
                   </p>
                 </div>
               )}

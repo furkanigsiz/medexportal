@@ -158,3 +158,32 @@ export const getTicketById = query({
     return ticket;
   },
 });
+
+export const deleteTicket = mutation({
+  args: {
+    ticketId: v.id("tickets"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", identity.email!))
+      .first();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Sadece admin ve superadmin ticket silebilir
+    if (user.role !== "admin" && user.role !== "superadmin") {
+      throw new Error("Bu işlem için yetkiniz yok");
+    }
+
+    // Ticket'ı sil
+    await ctx.db.delete(args.ticketId);
+  },
+});

@@ -62,6 +62,67 @@ function FeedbackContent() {
   const addFeedback = useMutation(api.feedback.addFeedback)
   const updateFeedback = useMutation(api.feedback.updateFeedback)
   
+  // Mock veriler
+  const mockFeedback = [
+    {
+      _id: 'mock-1',
+      title: 'Ofis Sıcaklığı Sorunu',
+      content: 'Ofis çok sıcak, klima ayarlarının düzenlenmesi gerekiyor. Çalışma verimliliğimizi etkiliyor.',
+      category: 'general',
+      priority: 'medium',
+      status: 'open',
+      author: 'Ayşe Demir',
+      createdAt: Date.now() - 86400000 * 2,
+      response: undefined
+    },
+    {
+      _id: 'mock-2',
+      title: 'IT Sistem Yavaşlığı',
+      content: 'Bilgisayar sistemleri çok yavaş çalışıyor. Acil çözüm gerekiyor.',
+      category: 'technical',
+      priority: 'high',
+      status: 'in_progress',
+      author: 'Mehmet Kaya',
+      createdAt: Date.now() - 86400000 * 5,
+      response: 'Sorununuz inceleniyor. En kısa sürede çözüm sağlanacak.'
+    },
+    {
+      _id: 'mock-3',
+      title: 'Yemekhane Menü Önerisi',
+      content: 'Yemekhane menüsüne daha sağlıklı seçenekler eklenebilir mi?',
+      category: 'hr',
+      priority: 'low',
+      status: 'resolved',
+      author: 'Fatma Özkan',
+      createdAt: Date.now() - 86400000 * 7,
+      response: 'Öneriniz değerlendirildi. Menüye sağlıklı seçenekler eklenecek.'
+    },
+    {
+      _id: 'mock-4',
+      title: 'Park Alanı Sorunu',
+      content: 'Ofis park alanında yeterli yer yok. Yeni çözümler düşünülebilir mi?',
+      category: 'general',
+      priority: 'medium',
+      status: 'open',
+      author: 'Ali Veli',
+      createdAt: Date.now() - 86400000 * 10,
+      response: undefined
+    },
+    {
+      _id: 'mock-5',
+      title: 'Eğitim Programı Önerisi',
+      content: 'Dijital pazarlama konusunda eğitim programı düzenlenebilir mi?',
+      category: 'hr',
+      priority: 'low',
+      status: 'closed',
+      author: 'Zeynep Ak',
+      createdAt: Date.now() - 86400000 * 14,
+      response: 'Eğitim programı planlandı. Detaylar yakında paylaşılacak.'
+    }
+  ]
+  
+  // Gerçek veriler yoksa mock verileri kullan
+  const displayFeedback = feedback && feedback.length > 0 ? feedback : mockFeedback
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [selectedStatus, setSelectedStatus] = useState('all')
@@ -93,7 +154,7 @@ function FeedbackContent() {
   ]
 
   // Filtreleme
-  const filteredFeedback = feedback?.filter(item => {
+  const filteredFeedback = displayFeedback?.filter(item => {
     const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          item.content.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory

@@ -1,12 +1,12 @@
 'use client'
 
 import { Authenticated, Unauthenticated } from 'convex/react'
-import { SignInButton } from '@clerk/nextjs'
 import { useQuery } from 'convex/react'
+import Link from 'next/link'
 import { api } from '../convex/_generated/api'
 import Navbar from '@/components/Navbar'
 import UserInitializer from '@/components/UserInitializer'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { 
@@ -14,10 +14,6 @@ import {
   Calendar, 
   MessageSquare, 
   Users, 
-  TrendingUp, 
-  Star,
-  Clock,
-  ArrowRight,
   Search,
   Folder,
   BookOpen,
@@ -32,7 +28,6 @@ import {
   Bell,
   Eye
 } from 'lucide-react'
-import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
 export default function Home() {
@@ -93,19 +88,19 @@ export default function Home() {
             
             {/* Giriş butonları */}
             <div className="space-y-4 max-w-md mx-auto">
-              <a 
+              <Link 
                 href="/sign-in" 
                 className="block bg-medex-red hover:bg-red-700 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 shadow-lg w-full text-center"
               >
                 Giriş Yap
-              </a>
+              </Link>
               
-              <a 
+              <Link 
                 href="/sign-up" 
                 className="block bg-white hover:bg-white text-medex-navy font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 shadow-lg border-2 border-white w-full text-center"
               >
                 Kayıt Ol
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -125,7 +120,7 @@ function Dashboard() {
   const medexPerspective = useQuery(api.medexPerspective.getMedexPerspective)
 
   const [searchTerm, setSearchTerm] = useState('')
-  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [searchResults, setSearchResults] = useState<Array<{ type: string; item: unknown; title: string; content: string }>>([])
 
   const currentHour = new Date().getHours()
   const greeting = currentHour < 6 ? 'İyi geceler' : currentHour < 12 ? 'Günaydın' : currentHour < 18 ? 'İyi günler' : 'İyi akşamlar'
@@ -142,7 +137,7 @@ function Dashboard() {
       return
     }
 
-    const results: any[] = []
+    const results: Array<{ type: string; item: unknown; title: string; content: string }> = []
     
     // Arama terimi varsa filtrele
     // Haberlerde arama

@@ -46,6 +46,43 @@ export default function NewsPage() {
 
 function NewsContent() {
   const news = useQuery(api.news.getNews)
+  
+  // Mock veriler
+  const mockNews = [
+    {
+      _id: 'mock-1',
+      title: 'Yeni Çalışan Oryantasyon Programı Başlıyor',
+      content: 'Şirketimize yeni katılan çalışanlar için kapsamlı oryantasyon programımız başlıyor. Program kapsamında şirket kültürü, politikalar ve iş süreçleri hakkında detaylı bilgilendirmeler yapılacak.',
+      createdAt: Date.now() - 86400000 * 2
+    },
+    {
+      _id: 'mock-2',
+      title: 'IT Güvenlik Güncellemeleri',
+      content: 'Bilgi güvenliği politikalarımızda yapılan güncellemeler hakkında tüm çalışanların bilgilendirilmesi gerekmektedir. Yeni güvenlik protokolleri 1 Mart tarihinden itibaren geçerli olacaktır.',
+      createdAt: Date.now() - 86400000 * 5
+    },
+    {
+      _id: 'mock-3',
+      title: 'Yıllık Performans Değerlendirme Dönemi',
+      content: '2024 yılı performans değerlendirme süreci başlıyor. Tüm çalışanların değerlendirme formlarını 15 Mart tarihine kadar doldurmaları gerekmektedir.',
+      createdAt: Date.now() - 86400000 * 7
+    },
+    {
+      _id: 'mock-4',
+      title: 'Şirket İçi Eğitim Programları',
+      content: 'Bu ay içinde düzenlenecek eğitim programları: Liderlik Becerileri, Proje Yönetimi, Dijital Dönüşüm ve İnovasyon. Kayıtlar eğitim departmanından yapılabilir.',
+      createdAt: Date.now() - 86400000 * 10
+    },
+    {
+      _id: 'mock-5',
+      title: 'Çalışan Sağlık ve Güvenlik Güncellemeleri',
+      content: 'İş sağlığı ve güvenliği konusunda yeni düzenlemeler yürürlüğe girdi. Tüm çalışanların güncellenmiş güvenlik protokollerini öğrenmeleri zorunludur.',
+      createdAt: Date.now() - 86400000 * 14
+    }
+  ]
+  
+  // Gerçek veriler yoksa mock verileri kullan
+  const displayNews = news && news.length > 0 ? news : mockNews
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#FFFFFF' }}>
@@ -66,8 +103,8 @@ function NewsContent() {
 
         {/* News List */}
         <div className="space-y-6">
-          {news && news.length > 0 ? (
-            news.map((item) => (
+          {displayNews && displayNews.length > 0 ? (
+            displayNews.map((item) => (
               <Card key={item._id} className="hover:shadow-lg transition-shadow border-l-4 border-l-medex-navy">
                 <CardHeader>
                   <div className="flex items-start justify-between">

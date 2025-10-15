@@ -4,6 +4,7 @@ import { Authenticated, Unauthenticated } from 'convex/react'
 import { SignInButton } from '@clerk/nextjs'
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../../convex/_generated/api'
+import { Id } from '../../../convex/_generated/dataModel'
 import Navbar from '@/components/Navbar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -62,7 +63,7 @@ function AdminTrainingsContent() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [isAddingTraining, setIsAddingTraining] = useState(false)
-  const [editingTraining, setEditingTraining] = useState<any>(null)
+  const [editingTraining, setEditingTraining] = useState<{ _id: string; title: string; description: string; content: string; category: string; duration: string; difficulty: string; instructor: string; videoUrl?: string; materials?: string[] } | null>(null)
   const [newTraining, setNewTraining] = useState({
     title: '',
     description: '',
@@ -156,13 +157,13 @@ function AdminTrainingsContent() {
 
     try {
       await updateTraining({
-        id: editingTraining._id,
+        id: editingTraining._id as Id<"trainings">,
         title: editingTraining.title,
         description: editingTraining.description,
         content: editingTraining.content,
         category: editingTraining.category,
         duration: editingTraining.duration,
-        difficulty: editingTraining.difficulty,
+        difficulty: editingTraining.difficulty as 'beginner' | 'intermediate' | 'advanced',
         instructor: editingTraining.instructor,
         videoUrl: editingTraining.videoUrl || undefined,
         materials: editingTraining.materials
@@ -180,7 +181,7 @@ function AdminTrainingsContent() {
     if (!confirm('Bu eğitimi silmek istediğinizden emin misiniz?')) return
 
     try {
-      await deleteTraining({ trainingId: trainingId as any })
+      await deleteTraining({ trainingId: trainingId as Id<"trainings"> })
       alert('Eğitim başarıyla silindi!')
     } catch (error) {
       console.error('Eğitim silme hatası:', error)
@@ -401,7 +402,7 @@ function AdminTrainingsContent() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Zorluk</label>
                     <select
                       value={newTraining.difficulty}
-                      onChange={(e) => setNewTraining({...newTraining, difficulty: e.target.value as any})}
+                      onChange={(e) => setNewTraining({...newTraining, difficulty: e.target.value as 'beginner' | 'intermediate' | 'advanced'})}
                       className="w-full p-2 border border-gray-300 rounded-md"
                     >
                       <option value="beginner">Başlangıç</option>
@@ -524,7 +525,7 @@ function AdminTrainingsContent() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Zorluk</label>
                     <select
                       value={editingTraining.difficulty}
-                      onChange={(e) => setEditingTraining({...editingTraining, difficulty: e.target.value as any})}
+                      onChange={(e) => setEditingTraining({...editingTraining, difficulty: e.target.value as 'beginner' | 'intermediate' | 'advanced'})}
                       className="w-full p-2 border border-gray-300 rounded-md"
                     >
                       <option value="beginner">Başlangıç</option>

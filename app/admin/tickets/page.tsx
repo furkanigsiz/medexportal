@@ -4,6 +4,7 @@ import { Authenticated, Unauthenticated } from 'convex/react'
 import { SignInButton } from '@clerk/nextjs'
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../../convex/_generated/api'
+import { Id } from '../../../convex/_generated/dataModel'
 import Navbar from '@/components/Navbar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -18,7 +19,8 @@ import {
   AlertCircle,
   Search,
   Reply,
-  Edit
+  Edit,
+  Trash2
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -52,6 +54,9 @@ export default function AdminTicketsPage() {
 function AdminTicketsContent() {
   const user = useQuery(api.users.getCurrentUser)
   const tickets = useQuery(api.tickets.getTickets)
+  const updateTicketStatus = useMutation(api.tickets.updateTicketStatus)
+  const addTicketReply = useMutation(api.tickets.addTicketReply)
+  const deleteTicket = useMutation(api.tickets.deleteTicket)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
 
@@ -155,12 +160,13 @@ function AdminTicketsContent() {
   )
 }
 
-function AdminTicketCard({ ticket }: { ticket: any }) {
+function AdminTicketCard({ ticket }: { ticket: { _id: string; title: string; description: string; status: string; createdAt: number; userId: string; reply?: string; updatedAt: number } }) {
   const [reply, setReply] = useState('')
   const [isReplying, setIsReplying] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const updateTicketStatus = useMutation(api.tickets.updateTicketStatus)
   const addTicketReply = useMutation(api.tickets.addTicketReply)
+  const deleteTicket = useMutation(api.tickets.deleteTicket)
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -204,8 +210,8 @@ function AdminTicketCard({ ticket }: { ticket: any }) {
   const handleStatusUpdate = async (newStatus: string) => {
     try {
       await updateTicketStatus({
-        ticketId: ticket._id,
-        status: newStatus as any,
+        ticketId: ticket._id as Id<"tickets">,
+        status: newStatus as 'open' | 'in_progress' | 'closed',
         reply: reply || undefined
       })
       setReply('')
@@ -220,13 +226,25 @@ function AdminTicketCard({ ticket }: { ticket: any }) {
     
     try {
       await addTicketReply({
-        ticketId: ticket._id,
+        ticketId: ticket._id as Id<"tickets">,
         reply: reply.trim()
       })
       setReply('')
       setIsReplying(false)
     } catch (error) {
       console.error('Error adding reply:', error)
+    }
+  }
+
+  const handleDeleteTicket = async () => {
+    if (!confirm('Bu destek talebini silmek istediğinizden emin misiniz?')) return
+
+    try {
+      await deleteTicket({ ticketId: ticket._id as Id<"tickets"> })
+      alert('Destek talebi başarıyla silindi!')
+    } catch (error) {
+      console.error('Error deleting ticket:', error)
+      alert('Destek talebi silinirken bir hata oluştu')
     }
   }
 
@@ -310,6 +328,15 @@ function AdminTicketCard({ ticket }: { ticket: any }) {
                   </div>
                 </DialogContent>
               </Dialog>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="text-red-600 hover:text-red-700"
+                onClick={handleDeleteTicket}
+              >
+                <Trash2 className="w-4 h-4 mr-1" />
+                Sil
+              </Button>
             </div>
           </div>
         </div>
