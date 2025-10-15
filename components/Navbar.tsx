@@ -36,6 +36,7 @@ export default function Navbar() {
     { label: 'Ana Sayfa', href: '/' },
     { label: 'Dökümanlar', href: '/documents' },
     { label: 'Etkinlikler', href: '/events' },
+    { label: 'Toplantılar', href: '/meetings' },
     { label: 'Haberler', href: '/news' },
     { label: 'Eğitimler', href: '/trainings' },
     { label: 'Destek', href: '/tickets' },

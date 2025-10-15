@@ -18,7 +18,8 @@ import {
   TrendingUp,
   Shield,
   BarChart3,
-  BookOpen
+  BookOpen,
+  Video
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -56,6 +57,7 @@ function AdminContent() {
   const events = useQuery(api.events.getEvents)
   const tickets = useQuery(api.tickets.getTickets)
   const documents = useQuery(api.documents.getDocuments)
+  const meetings = useQuery(api.meetings.getMeetings, {})
 
   // Admin yetkisi kontrolü
   if (user && (user.role !== 'admin' && user.role !== 'superadmin')) {
@@ -84,6 +86,8 @@ function AdminContent() {
     openTickets: tickets?.filter(t => t.status === 'open').length || 0,
     totalTickets: tickets?.length || 0,
     totalDocuments: documents?.length || 0,
+    totalMeetings: meetings?.length || 0,
+    ongoingMeetings: meetings?.filter(m => m.status === 'ongoing').length || 0,
   }
 
   return (
@@ -139,13 +143,13 @@ function AdminContent() {
           <Card className="border-purple-200" style={{ backgroundColor: '#003466' }}>
             <CardHeader className="pb-3">
               <div className="flex items-center space-x-2">
-                <TrendingUp className="w-5 h-5 text-white" />
-                <CardTitle className="text-lg text-white">İçerik</CardTitle>
+                <Video className="w-5 h-5 text-white" />
+                <CardTitle className="text-lg text-white">Toplantılar</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">{stats.totalNews + stats.totalEvents}</div>
-              <p className="text-sm text-gray-200">Duyuru + Etkinlik</p>
+              <div className="text-2xl font-bold text-white">{stats.totalMeetings}</div>
+              <p className="text-sm text-gray-200">{stats.ongoingMeetings} devam ediyor</p>
             </CardContent>
           </Card>
         </div>
@@ -196,6 +200,12 @@ function AdminContent() {
               <Button variant="outline" className="w-full justify-start hover:bg-blue-600 hover:text-white transition-colors" style={{ borderColor: '#003466', color: '#003466' }}>
                 <BookOpen className="w-4 h-4 mr-2" />
                 Eğitim Yönetimi
+              </Button>
+            </Link>
+            <Link href="/admin/meetings">
+              <Button variant="outline" className="w-full justify-start hover:bg-blue-600 hover:text-white transition-colors" style={{ borderColor: '#003466', color: '#003466' }}>
+                <Video className="w-4 h-4 mr-2" />
+                Toplantı Yönetimi ({stats.totalMeetings})
               </Button>
             </Link>
             </CardContent>

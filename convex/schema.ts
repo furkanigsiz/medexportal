@@ -158,4 +158,31 @@ export default defineSchema({
     createdAt: v.number(),
     updatedAt: v.number(),
   }).index("by_category", ["category"]).index("by_difficulty", ["difficulty"]).index("by_created_by", ["createdBy"]),
+
+  // Toplantılar için
+  meetings: defineTable({
+    title: v.string(),
+    description: v.optional(v.string()),
+    startTime: v.number(),
+    endTime: v.optional(v.number()),
+    organizerId: v.id("users"),
+    participants: v.array(v.id("users")),
+    invitedEmails: v.optional(v.array(v.string())), // Email davetleri
+    status: v.union(
+      v.literal("scheduled"), 
+      v.literal("ongoing"), 
+      v.literal("completed"), 
+      v.literal("cancelled")
+    ),
+    meetingId: v.string(), // Jitsi room ID (unique)
+    meetingUrl: v.string(),
+    recordingUrl: v.optional(v.string()),
+    isRecurring: v.optional(v.boolean()),
+    recurrencePattern: v.optional(v.string()), // daily, weekly, monthly
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+  .index("by_organizer", ["organizerId"])
+  .index("by_status", ["status"])
+  .index("by_start_time", ["startTime"]),
 });

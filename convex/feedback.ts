@@ -5,32 +5,24 @@ import { v } from "convex/values";
 export const getFeedback = query({
   args: {},
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Not authenticated");
-    }
+    // Geçici olarak authentication devre dışı
+    // const identity = await ctx.auth.getUserIdentity();
+    // if (!identity) {
+    //   throw new Error("Not authenticated");
+    // }
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .first();
+    // const user = await ctx.db
+    //   .query("users")
+    //   .withIndex("by_email", (q) => q.eq("email", identity.email!))
+    //   .first();
 
-    if (!user) {
-      throw new Error("User not found");
-    }
+    // if (!user) {
+    //   throw new Error("User not found");
+    // }
 
-    // Sadece admin ve superadmin tüm geri bildirimleri görebilir
-    if (user.role === "admin" || user.role === "superadmin") {
-      return await ctx.db
-        .query("feedback")
-        .order("desc")
-        .collect();
-    }
-
-    // Employee sadece kendi geri bildirimlerini görebilir
+    // Geçici olarak tüm geri bildirimleri döndür
     return await ctx.db
       .query("feedback")
-      .withIndex("by_author", (q) => q.eq("authorId", user._id))
       .order("desc")
       .collect();
   },

@@ -48,7 +48,7 @@ export default function SignInPage() {
                 }
               }}
               afterSignUpUrl="/"
-              redirectUrl="http://localhost:3002/"
+              redirectUrl="/"
             />
           ) : (
             <SignIn 
@@ -64,7 +64,7 @@ export default function SignInPage() {
                   footerActionLink: 'text-blue-600 hover:text-blue-700',
                 }
               }}
-              redirectUrl="http://localhost:3002/"
+              redirectUrl="/"
             />
           )}
         </div>

@@ -19,6 +19,7 @@ import type * as events from "../events.js";
 import type * as feedback from "../feedback.js";
 import type * as forum from "../forum.js";
 import type * as medexPerspective from "../medexPerspective.js";
+import type * as meetings from "../meetings.js";
 import type * as messages from "../messages.js";
 import type * as newJoiners from "../newJoiners.js";
 import type * as news from "../news.js";
@@ -43,6 +44,7 @@ declare const fullApi: ApiFromModules<{
   feedback: typeof feedback;
   forum: typeof forum;
   medexPerspective: typeof medexPerspective;
+  meetings: typeof meetings;
   messages: typeof messages;
   newJoiners: typeof newJoiners;
   news: typeof news;
