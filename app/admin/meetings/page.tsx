@@ -23,7 +23,7 @@ import { useState } from 'react'
 import { Id } from '../../../convex/_generated/dataModel'
 
 export default function AdminMeetingsPage() {
-  const meetings = useQuery(api.meetings.getMeetings, {})
+  const meetings = useQuery(api.meetings.getMeetings)
   const deleteMeeting = useMutation(api.meetings.deleteMeeting)
   const updateMeetingStatus = useMutation(api.meetings.updateMeetingStatus)
   const [deletingId, setDeletingId] = useState<string | null>(null)

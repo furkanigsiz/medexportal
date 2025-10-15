@@ -99,16 +99,9 @@ export const createMeeting = mutation({
 
 // Toplantıları getirme
 export const getMeetings = query({
-  args: {
-    status: v.optional(v.union(
-      v.literal("scheduled"), 
-      v.literal("ongoing"), 
-      v.literal("completed"), 
-      v.literal("cancelled")
-    )),
-  },
-  handler: async (ctx, args) => {
-    // Geçici olarak tüm toplantıları döndür
+  args: {},
+  handler: async (ctx) => {
+    // Tüm toplantıları döndür
     return await ctx.db.query("meetings").collect();
   },
 });

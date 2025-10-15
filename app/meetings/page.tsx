@@ -12,7 +12,7 @@ import { tr } from 'date-fns/locale'
 import Navbar from '@/components/Navbar'
 
 export default function MeetingsPage() {
-  const meetings = useQuery(api.meetings.getMeetings, {})
+  const meetings = useQuery(api.meetings.getMeetings)
 
   return (
     <>
